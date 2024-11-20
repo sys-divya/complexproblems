@@ -1,0 +1,337 @@
+/*
+1. write a c program to create linked list of n nodes and sort it using selection 
+sort.
+2. write the c program to create linked list of n nodes and find the given number 
+in linked list.
+6. Write c program to two merge two linked list.
+
+
+*/
+
+
+
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+	int data;
+	struct node* next;
+};
+struct node* createnode();
+struct node* createnode2();
+void createLL(struct node**);
+void displayLL(struct node*);
+void insretat1st(struct node**);
+void insertatpos(struct node**);
+int countnode(struct node*);
+void deleteat1st(struct node**);
+void deleteatlast(struct node**);
+void deleteatpos(struct node**);
+void sorttheLL(struct node*);
+void findtheno(struct node*);
+void join1and2(struct node**,struct node**);
+void displayre(struct node*);
+
+void main()
+{
+	int ch;
+	struct node* first = NULL;
+	struct node* second = NULL;
+	do
+	{
+		printf("\n1.create linked list");
+		printf("\n2.display linked list");
+		printf("\n3.insert at last");
+		printf("\n4.insert at first");
+		printf("\n5.insert at position");
+		printf("\n6.delete at first");
+		printf("\n7.delete at last");
+		printf("\n8.delete at position");
+		printf("\n9.sort the linked list");
+		printf("\n10.find the given no. is present or not");
+		printf("\n11.create 2nd linked list");
+		printf("\n12.display 2nd linked list");
+		printf("\n13.concadinate linked list 1 and linked list 2");
+		printf("\n14.display with recurcion");
+		printf("\n0.exit linked list");
+		printf("\nwhat do u want to do?");
+		scanf_s("%d", &ch);
+		switch (ch)
+		{
+		case 1:createLL(&first);
+			break;
+		case 2:displayLL(first);
+			break;
+		case 3:createLL(&first);
+			break;
+		case 4:insretat1st(&first);
+			break;
+		case 5:insertatpos(&first);
+			break;
+		case 6:deleteat1st(&first);
+			break;
+		case 7:deleteatlast(&first);
+			break;
+		case 8:deleteatpos(&first);
+			break;
+		case 9:sorttheLL(first);
+			break;
+		case 10:findtheno(first);
+			break;
+		case 11:createLL(&second);
+			break;
+		case 12:displayLL(second);
+			break;
+		case 13:join1and2(&first, &second);
+			break;
+		case 14:displayre(first);
+			break;
+		default:printf("\nnot valid choice");
+			break;
+		}
+	} while (ch != 0);
+}
+
+struct node* createnode()
+{
+	struct node* p = NULL;
+	int data;
+	p = (struct node*)malloc(sizeof(struct node));
+	if (p == NULL)
+	{
+		printf("\nmemory is not allocated");
+	}
+	else
+	{
+		printf("\nenter the data for linked list=");
+		scanf_s("%d", &data);
+		p->data = data;
+		p->next = NULL;
+		return p;
+	}
+}
+struct node* createnode2()
+{
+	int data;
+	struct node* p = NULL;
+	p = (struct node*)malloc(sizeof(struct node));
+	if (p == NULL)
+	{
+		printf("\nmemory is not allocated");
+	}
+	else
+	{
+		printf("\nenter the data for linked list=");
+		scanf_s("%d", &data);
+		p->data = data;
+		p->next = NULL;
+		return p;
+	}
+}
+
+void createLL(struct node** head)
+{
+	struct node* nn = NULL;
+	struct node* temp = NULL;
+	nn = createnode();
+
+	if (*head == NULL)
+	{
+		*head = nn;
+	}
+	else
+	{
+		temp = *head;
+		while (temp->next != NULL)
+		{
+			temp = temp->next;
+		}
+		temp->next = nn;
+
+
+	}
+}
+
+void displayLL(struct node* head)
+{
+	while (head != NULL)
+	{
+		printf("%d=>", head->data);
+		head = head->next;
+	}
+}
+void insretat1st(struct node** head)
+{
+	struct node* nn = NULL;
+	nn = createnode();
+	nn->next = *head;
+	*head = nn;
+}
+int countnode(struct node* head)
+{
+	int count = 0;
+	while (head->next != NULL)
+	{
+		head = head->next;
+		count++;
+	}
+	return count;
+}
+void insertatpos(struct node** head)
+{
+	int n, i, pos;
+	struct node* temp = *head;
+	printf("\nenter the position at which u want to insert=");
+	scanf_s("%d", &pos);
+	n = countnode(*head);
+	if (pos == 1)
+	{
+		insretat1st(head);
+	}
+	else if (pos == n + 1)
+	{
+		createLL(head);
+	}
+	else if (pos<1 || pos>n + 1)
+	{
+		printf("\nnot proper position ");
+	}
+	else
+	{
+		struct node* nn = NULL;
+		for (i = 1; i < pos; i++)
+		{
+			temp = temp->next;//pos=4 i=2 temp=3 ->next=400
+		}
+		nn = createnode();
+		nn->next = temp->next;// nn->next=400
+		temp->next = nn;
+
+	}
+}
+
+void deleteat1st(struct node** head)
+{
+	struct node* temp = *head;
+	if (*head == NULL)
+	{
+		printf("\nnothing to deleting");
+	}
+	else
+	{
+
+		*head = temp->next;
+		free(temp);
+	}
+}
+void deleteatlast(struct node** head)
+{
+	struct node* temp = *head;
+	if (temp == NULL)//NO NODE
+	{
+		printf("\nnothing to deleting");
+	}
+	else if (temp->next == NULL)//SINGLE node
+	{
+		free(temp);
+		temp = NULL;
+	}
+	else
+	{
+		while (temp->next->next != NULL)//200=null//400=null
+		{
+			temp = temp->next;
+		}
+		free(temp->next);
+		temp->next = NULL;
+
+	}
+}
+void deleteatpos(struct node** head)
+{
+	int pos, i, n;
+	n = countnode(*head);
+	struct node* temp = *head, * temp2 = NULL;
+	printf("\nenter the position=");
+	scanf_s("%d", &pos);
+	if (pos == 1)
+	{
+		deleteat1st(head);
+	}
+	else if (pos == n)
+	{
+		deleteatlast(head);
+	}
+	else if (pos<1 || pos>n)
+	{
+		printf("\nnothing to delete");
+	}
+	else
+	{
+		for (i = 1; i < pos; i++)
+		{
+			temp = temp->next;
+		}
+		temp2 = temp->next;//t2=300
+		temp->next = temp2->next;//200->next we have to store 400 in it so 200->next=300->next(400)
+		free(temp2);
+	}
+}
+void sorttheLL(struct node* head)
+{
+	struct node* temp = head, * trav1 = NULL, * trav2 = NULL;
+	int s;
+	int n = countnode(head);
+	for (trav1 = temp; trav1 != NULL; trav1 = trav1->next)
+	{
+		for (trav2 = temp->next; trav2 != NULL; trav2 = trav2->next)
+		{
+			if (trav1->data > trav2->data)
+			{
+				s = temp->data;
+				temp->data = temp->next->data;
+				temp->next->data = s;
+			}
+		}
+	}
+}
+void findtheno(struct node* head)
+{
+	int n;
+	printf("\nenter the no. which u WANT=");
+	scanf_s("%d", &n);
+	while (head != NULL)
+	{
+		if (head->data == n)
+		{
+			printf("\n%d is present in linked list", n);
+			break;
+		}
+		head = head->next;
+	}
+
+}
+
+void join1and2(struct node** head1, struct node** head2)
+{
+	struct node* temp1= *head1;
+	struct node* temp2 = *head2;
+	while (temp1->next != NULL)
+	{
+		temp1 = temp1->next;
+	}
+	temp1->next = temp2;
+	temp2 = NULL;
+
+}
+void displayre(struct node* head)
+{
+	
+	printf("%d=>", head->data);
+	head=head->next;
+	if (head != NULL)
+	{
+		displayre(head);
+	}
+	
+}
