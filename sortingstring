@@ -1,0 +1,16 @@
+char S[10], t;
+    cin >> S;
+    int c = 0, d = 0;
+    for (int i = 0; i < strlen(S); i++)
+    {
+        for (int j = i + 1; j < strlen(S); j++)
+        {
+            if (S[i]>S[j])
+            { 
+                t = S[j];
+                S[j] = S[i];
+                S[i] = t;
+            }
+        }
+    }
+    cout << S;
