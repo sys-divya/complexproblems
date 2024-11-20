@@ -1,0 +1,18 @@
+int n, arr[10], x,p,q;
+    cout << "n:";
+    cin >> n;
+    for (int i = 0; i < n; i++)
+    {
+        cin >> arr[i];
+    }
+    cout << "x:";
+    cin >> x;
+    for (int i = 0; i < n; i++)
+    {
+        if (i == x) {
+            p = abs(arr[i] - arr[i + 1]);
+            q = abs(arr[i] - arr[i - 1]);
+        }
+    }
+    
+        cout << p + q;
