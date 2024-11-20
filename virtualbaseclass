@@ -1,0 +1,38 @@
+#include <iostream>
+class power
+{
+public:
+	power(int pw)
+	{
+		std::cout << "pw=>" << pw << "\n";
+	}
+};
+class scanner :virtual public power
+{
+public:
+	scanner(int pw, int sc) :power(pw)
+	{
+		std::cout << "sc=>" << sc << "\n";
+	}
+};
+class printer :virtual public power
+{
+public:
+	printer(int pw, int pr) : power(pw)
+	{
+		std::cout << "pr=>" << pr << "\n";
+	}
+};
+class xerox :public scanner, public printer
+{
+public:
+	xerox(int pw, int sc,int pr,int xe) : power(pw),scanner(pw,sc),printer(pw,pr)
+	{
+		std::cout << "xe=>" << xe << "\n";
+	}
+};
+int main()
+{
+	xerox x(1, 2, 3, 4);
+	return 0;
+}
