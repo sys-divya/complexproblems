@@ -1,0 +1,235 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node
+{
+	int data;
+	struct node* next;
+	struct node* prev;
+};
+struct node* createnode();
+void createLL(struct node**, struct node**);
+void displayLL(struct node*);
+/*void displayLLre(struct node*);*/
+void insertat1st(struct node**, struct node**);
+void deleteatlast(struct node**, struct node**);
+void deleteat1st(struct node**, struct node**);
+void insertatpos(struct node**, struct node**);
+int countnode(struct node*);
+void deleteatpos(struct node**, struct node**);
+void main()
+{
+	int ch;
+	struct node* first = NULL, * second = NULL;
+	do {
+		printf("\n1.create doubly linked list");
+		printf("\n2.display linked list");
+		/*printf("\n3.display reverse linked list");*/
+		printf("\n3.insert at last");
+		printf("\n4.insert at first");
+		printf("\n5.delete at last");
+		printf("\n6.delete at first");
+		printf("\n7.insert at position");
+		printf("\n8.delete at position");
+		printf("\n0.EXIT");
+		printf("\nwhat u want to do?");
+		scanf_s("%d", &ch);
+		switch (ch)
+		{
+		case 1:createLL(&first, &second);
+			break;
+		case 2:displayLL(first);
+			break;
+			/*case 3:displayLLre(second);
+				break;*/
+		case 3:createLL(&first, &second);
+			break;
+		case 4:insertat1st(&first, &second);
+			break;
+		case 5:deleteatlast(&first, &second);
+			break;
+		case 6:deleteat1st(&first, &second);
+			break;
+		case 7:insertatpos(&first, &second);
+			break;
+		case 8:deleteatpos(&first, &second);
+			break;
+		default:printf("\ninvalid choice");
+			break;
+		}
+	} while (ch != 0);
+}
+struct node* createnode()
+{
+	struct node* p = NULL;
+	p = (struct node*)malloc(sizeof(struct node));
+	if (p == NULL)
+	{
+		printf("\nmemory is not allocated");
+	}
+	else
+	{
+		printf("\neneter the data=");
+		scanf_s("%d", &(p->data));
+		p->next = NULL;
+		p->prev = NULL;
+		return p;
+	}
+
+}
+void createLL(struct node** head, struct node** last)
+{
+	struct node* nn = NULL;
+	struct node* f = *head, * n = *last;
+	nn = createnode();
+	if (*head == NULL && *last == NULL)
+	{
+		*head = *last = nn;
+	}
+	else
+	{
+		(*last)->next = nn;
+		nn->prev = *head;
+		*last = nn;
+
+	}
+}
+void displayLL(struct node* head)
+{
+	printf("\nlinked list normal=");
+	while (head != NULL)
+	{
+		printf("%d=>", head->data);
+		head = head->next;
+	}
+
+}
+/*void displayLLre(struct node* last)
+{
+
+	printf("\nreverse linked list=");
+	while (last->prev != NULL)
+	{
+		printf("%d=>", last->data);
+		last = last->prev;
+	}
+}*/
+void insertat1st(struct node** head, struct node** last)
+{
+	struct node* nn = NULL;
+	nn = createnode();
+	if (*head == NULL && *last == NULL)
+	{
+		*head = *last = nn;
+	}
+	else
+	{
+		(*head)->prev = nn;
+		nn->next = *head;
+		*head = nn;
+	}
+}
+void deleteatlast(struct node** head, struct node** last)
+{
+	if (*head == NULL && *last == NULL)
+	{
+		printf("\nnothing to delete");
+	}
+	else if ((*head)->next == NULL && (*last)->next == NULL)
+	{
+		free(*head);
+		*head = *last = NULL;
+	}
+	else
+	{
+		*last = (*last)->prev;
+		free((*last)->next);
+		(*last)->next = NULL;
+	}
+}
+void deleteat1st(struct node** head, struct node** last)
+{
+	if (*head == NULL && *last == NULL)
+	{
+		printf("\nnothing to delete");
+	}
+	else if ((*head)->next == NULL && (*last)->next == NULL)
+	{
+		free(*head);
+		*head = *last = NULL;
+	}
+	else
+	{
+		*head = (*head)->next;
+		free((*head)->next);
+		(*head)->next = NULL;
+	}
+}
+int countnode(struct node* head)
+{
+	int count = 0;
+	while (head != NULL)
+	{
+		count = count + 1;
+		head = head->next;
+	}
+	return count;
+}
+void insertatpos(struct node** head, struct node** last)
+{
+	int pos, n, i;
+	struct node* nn = NULL, * trav = *head;
+	printf("\nenter the position=");
+	scanf_s("%d", &pos);
+	n = countnode(*head);
+	if (pos == 1)
+	{
+		insertat1st(head, last);
+	}
+	else if (pos == n + 1)
+	{
+		createLL(head, last);
+	}
+	else if (pos<1 || pos>n + 1)
+	{
+		printf("\nnot valid position");
+	}
+	else
+	{
+		nn = createnode();
+		for (i = 1; i < pos; i++)
+		{
+			trav = trav->next;
+		}
+		nn->prev = trav->prev;
+		nn->next = trav;
+		trav->prev->next = nn;
+		trav->prev = nn;
+	}
+
+}
+void deleteatpos(struct node** head, struct node** last)
+{
+	int pos, i, n;
+	struct node* trav = *head;
+	n = countnode(*head);
+	printf("\nenter the position=");
+	scanf_s("%d", &pos);
+	if (pos == 1)
+	{
+		deleteat1st(head, last);
+	}
+	else if (pos == n)
+	{
+		deleteatlast(head, last);
+	}
+	else if (pos<1 || pos>n)
+	{
+		for (i = 1; i < pos; i++)
+		{
+			trav = trav->next;
+		}
+		trav->prev->next = trav->next;
+		trav->next->prev = trav->prev;
+		free(trav);
+	}
+}
